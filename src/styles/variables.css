@@ -1,0 +1,14 @@
+:root {
+  --sidebar-width: 230px;
+
+  --sidebar-bg: #2f2a5c;        /* dark purple/blue */
+  --sidebar-text: #ffffff;
+  --sidebar-hover: rgba(255,255,255,0.12);
+  --sidebar-active: #ffffff;
+
+  --radius-xl: 22px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  --shadow-lg: 0 12px 30px rgba(0,0,0,0.2);
+}

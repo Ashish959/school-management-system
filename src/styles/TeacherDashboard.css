@@ -1,0 +1,40 @@
+.teacher-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.teacher-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.teacher-card:hover {
+  transform: translateY(-4px);
+}
+
+.teacher-card h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #6b7280;
+}
+
+.teacher-card p {
+  margin-top: 10px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Status colors */
+.teacher-card.present p {
+  color: #16a34a;
+}
+
+.teacher-card.absent p {
+  color: #dc2626;
+}

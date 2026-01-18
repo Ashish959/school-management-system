@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+.dashboard-root {
+  min-height: 100vh;
+  background: var(--secondary-bg);
+}
+
+.dashboard-main {
+  transition: margin-left 0.3s ease;
+}
+
+.dashboard-content {
+  padding: 24px 28px;
+}

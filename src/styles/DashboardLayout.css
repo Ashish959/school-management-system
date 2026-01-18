@@ -1,0 +1,32 @@
+/* ===== ROOT LAYOUT ===== */
+.dashboard-root {
+  display: flex;
+  min-height: 100vh;
+  background: #f3f6fb;
+}
+
+/* ===== RIGHT SIDE ===== */
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+}
+
+/* ===== CONTENT ===== */
+.dashboard-content {
+  padding: 24px;
+  padding-top: 110px; /* header height */
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 900px) {
+  .dashboard-main {
+    margin-left: 0 !important;
+  }
+
+  .dashboard-content {
+    padding: 16px;
+    padding-top: 100px;
+  }
+}
