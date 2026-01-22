@@ -79,9 +79,15 @@
 .signup-text {
   margin-top: 15px;
   font-size: 14px;
+  text-align: center;
 }
 
 .signup-text span {
   color: #1e90ff;
   cursor: pointer;
+  font-weight: 600;
+}
+
+.signup-text span:hover {
+  text-decoration: underline;
 }
