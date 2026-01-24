@@ -1,18 +1,29 @@
+import { useEffect, useState } from "react";
+import api from "../services/api";
+import AddTeacherModal from "../components/AddTeacherModal";
 import "../styles/Teachers.css";
 
 const Teachers = () => {
-  const teachers = [
-    { id: 1, name: "Rohit Sharma", subject: "Maths", phone: "9876543210", status: "Active" },
-    { id: 2, name: "Anita Verma", subject: "Science", phone: "9123456780", status: "Active" },
-    { id: 3, name: "Suresh Kumar", subject: "English", phone: "9988776655", status: "Inactive" },
-  ];
+  const [teachers, setTeachers] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+
+  const loadTeachers = async () => {
+    const res = await api.get("/teachers");
+    setTeachers(res.data);
+  };
+
+  useEffect(() => {
+    loadTeachers();
+  }, []);
 
   return (
     <div className="teachers-page">
-      {/* PAGE HEADER */}
+      {/* HEADER */}
       <div className="teachers-header">
         <h2>Teachers</h2>
-        <button className="add-btn">+ Add Teacher</button>
+        <button className="add-btn" onClick={() => setShowModal(true)}>
+          + Add Teacher
+        </button>
       </div>
 
       {/* TABLE */}
@@ -33,12 +44,12 @@ const Teachers = () => {
             {teachers.map((t, index) => (
               <tr key={t.id}>
                 <td>{index + 1}</td>
-                <td>{t.name}</td>
+                <td>{t.firstName} {t.lastName}</td>
                 <td>{t.subject}</td>
-                <td>{t.phone}</td>
+                <td>{t.phoneNumber}</td>
                 <td>
-                  <span className={`status ${t.status.toLowerCase()}`}>
-                    {t.status}
+                  <span className={`status ${t.isActive ? "active" : "inactive"}`}>
+                    {t.isActive ? "Active" : "Inactive"}
                   </span>
                 </td>
                 <td>
@@ -49,6 +60,14 @@ const Teachers = () => {
           </tbody>
         </table>
       </div>
+
+      {/* MODAL */}
+      {showModal && (
+        <AddTeacherModal
+          onClose={() => setShowModal(false)}
+          onSuccess={loadTeachers}
+        />
+      )}
     </div>
   );
 };

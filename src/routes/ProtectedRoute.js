@@ -5,11 +5,14 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const { isLoggedIn, role } = useSelector((state) => state.auth);
 
   if (!isLoggedIn) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
 
-  if (allowedRoles && !allowedRoles.includes(role)) {
-    return <Navigate to="/" replace />;
+  // ✅ FIX: normalize role
+  const normalizedRole = role?.toLowerCase();
+
+  if (allowedRoles && !allowedRoles.includes(normalizedRole)) {
+    return <Navigate to="/login" replace />;
   }
 
   return children;
