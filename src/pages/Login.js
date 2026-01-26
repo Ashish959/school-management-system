@@ -19,7 +19,6 @@ function Login() {
     }
 
     const result = await dispatch(loginUser({ username, password }));
-debugger
     if (loginUser.fulfilled.match(result)) {
       const role = result.payload.role;
       if (role === "Admin"){

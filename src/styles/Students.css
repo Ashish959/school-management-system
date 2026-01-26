@@ -1,0 +1,118 @@
+.students-page {
+  padding: 20px;
+}
+
+/* Header */
+.students-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.students-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.add-student-btn {
+  background-color: #1e1b4b;
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.add-student-btn:hover {
+  background-color: #312e81;
+}
+
+/* Table Card */
+.students-table-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+/* Table */
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.students-table th {
+  text-align: left;
+  padding: 12px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.students-table td {
+  padding: 12px;
+  border-top: 1px solid #e5e7eb;
+  color: #111827;
+}
+
+/* Status */
+.status-active {
+  background-color: #dcfce7;
+  color: #166534;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Action */
+.edit-action {
+  color: #2563eb;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.edit-action:hover {
+  text-decoration: underline;
+}
+
+.status-inactive {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 420px;
+}
+
+.modal-form input,
+.modal-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}

@@ -1,12 +1,3 @@
-// import Sidebar from "../components/Sidebar";
-// import Header from "../components/Header";
-
-// const TeacherDashboard = () => {
-//   return <h1 className="page-title">Teacher Dashboard</h1>;
-// };
-
-// export default TeacherDashboard;
-
 
 import "../styles/TeacherDashboard.css";
 

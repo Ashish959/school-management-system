@@ -62,7 +62,12 @@
   cursor: pointer;
 }
 
-.modal-actions button:first-child {
+
+.modal-actions .btn-cancel {
+  background-color: #e92323;
+  color: #ffffff;
+}
+.modal-actions .btn-save {
   background-color: #2563eb;
   color: #ffffff;
 }

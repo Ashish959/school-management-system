@@ -1,3 +1,25 @@
+// import axios from "axios";
+
+// const api = axios.create({
+//   baseURL: "/api",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+// });
+
+// // JWT auto attach
+// api.interceptors.request.use((config) => {
+//   debugger;
+//   const token = localStorage.getItem("accessToken");
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
+
+// export default api;
+
+
 import axios from "axios";
 
 const api = axios.create({
@@ -7,12 +29,15 @@ const api = axios.create({
   },
 });
 
-// JWT auto attach
+// REQUEST: token localStorage se
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
-  if (token) {
+
+   if (token) {
+    config.headers = config.headers || {};
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 
