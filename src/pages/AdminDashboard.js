@@ -1,17 +1,42 @@
-// import { useState } from "react";
-// import Sidebar from "../components/Sidebar";
-// import Header from "../components/Header";
-// import { Outlet } from "react-router-dom";
-
-// const AdminDashboard = () => {
-//   return <h1 className="page-title">Admin Dashboard</h1>;
-// };
-
-// export default AdminDashboard;
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Admindashboard.css";
+import api from "../services/api";
 
 const AdminDashboard = () => {
+
+  const [dashboard, setDashboard] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    loadDashboard();
+  }, []);
+
+  const loadDashboard = async () => {
+    try {
+
+      const res = await api.get("/admin/dashboard", {
+        params: {
+          startDate: "2025-01-01",
+          endDate: "2025-06-30",
+          schoolId: 1
+        }
+      });
+
+      setDashboard(res.data);
+      setLoading(false);
+
+    } catch (err) {
+      console.log(err);
+      setError("Failed to load dashboard");
+      setLoading(false);
+    }
+  };
+
+
+  if (loading) return <h2>Loading Dashboard...</h2>;
+  if (error) return <h2>{error}</h2>;
+
   return (
     <div className="dashboard">
 
@@ -20,22 +45,22 @@ const AdminDashboard = () => {
 
         <div className="card">
           <h4>Students</h4>
-          <h2>150000</h2>
+          <h2>{dashboard.stats.students}</h2>
         </div>
 
         <div className="card">
           <h4>Teachers</h4>
-          <h2>2250</h2>
+          <h2>{dashboard.stats.teachers}</h2>
         </div>
 
         <div className="card">
           <h4>Parents</h4>
-          <h2>5690</h2>
+          <h2>{dashboard.stats.parents}</h2>
         </div>
 
         <div className="card">
           <h4>Earnings</h4>
-          <h2>$193000</h2>
+          <h2>₹ {dashboard.stats.earnings}</h2>
         </div>
 
       </div>
@@ -54,19 +79,29 @@ const AdminDashboard = () => {
             <div className="info-item">
               <span className="dot blue"></span>
               <p>Total Collection</p>
-              <h2>$75,000</h2>
+              <h2>
+                ₹ {dashboard.earnings.reduce(
+                  (sum, e) => sum + e.totalCollection,
+                  0
+                )}
+              </h2>
             </div>
 
             <div className="info-item">
               <span className="dot red"></span>
               <p>Fees Collection</p>
-              <h2>$15,000</h2>
+              <h2>
+                ₹ {dashboard.earnings.reduce(
+                  (sum, e) => sum + e.totalFees,
+                  0
+                )}
+              </h2>
             </div>
 
           </div>
 
 
-          {/* Fake Chart */}
+          {/* Fake Chart (Next: Real Chart) */}
           <div className="chart-area">
             <div className="chart blue"></div>
             <div className="chart red"></div>
@@ -81,9 +116,15 @@ const AdminDashboard = () => {
           <h3>Expenses</h3>
 
           <div className="bars">
-            <div className="bar green"></div>
-            <div className="bar blue"></div>
-            <div className="bar orange"></div>
+            {dashboard.earnings.map((e, i) => (
+              <div
+                key={i}
+                className="bar green"
+                style={{
+                  height: `${(e.totalExpense / 10000) * 100}%`
+                }}
+              ></div>
+            ))}
           </div>
 
         </div>
@@ -103,12 +144,12 @@ const AdminDashboard = () => {
 
             <div className="legend-item">
               <span className="line blue"></span>
-              <p>Female: 45,000</p>
+              <p>Female: {dashboard.gender.female}</p>
             </div>
 
             <div className="legend-item">
               <span className="line orange"></span>
-              <p>Male: 1,05,000</p>
+              <p>Male: {dashboard.gender.male}</p>
             </div>
           </div>
         </div>
