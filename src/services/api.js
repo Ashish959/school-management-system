@@ -21,13 +21,13 @@
 
 
 import axios from "axios";
-
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: "/api", // change to your backend URL
+  timeout: 15000,
   headers: {
-    "Content-Type": "application/json",
-  },
-});
+    "Content-Type": "application/json"
+  }
+});        
 
 // REQUEST: token localStorage se
 api.interceptors.request.use((config) => {

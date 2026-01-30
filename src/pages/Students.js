@@ -1,10 +1,15 @@
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
+=======
+import { useEffect, useState, useCallback } from "react";
+>>>>>>> 402eed8 (Updated school management system)
 import api from "../services/api";
 import AddStudentModal from "../components/AddStudentModal";
 import "../styles/Students.css";
 
 const Students = () => {
   const [students, setStudents] = useState([]);
+<<<<<<< HEAD
   const [showModal, setShowModal] = useState(false);
 
   // LOAD STUDENTS
@@ -29,6 +34,31 @@ const loadStudents = async () => {
   useEffect(() => {
     loadStudents();
   }, []);
+=======
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+
+  // ✅ Optimized with useCallback
+  const loadStudents = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const res = await api.get("/students");
+      setStudents(res.data ?? []);
+    } catch (err) {
+      console.error("Failed to load students", err);
+      setError("Unable to fetch students. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadStudents();
+  }, [loadStudents]);
+>>>>>>> 402eed8 (Updated school management system)
 
   return (
     <div className="students-page">
@@ -40,6 +70,7 @@ const loadStudents = async () => {
         </button>
       </div>
 
+<<<<<<< HEAD
       {/* TABLE */}
       <div className="table-wrapper">
         <table className="students-table">
@@ -78,6 +109,63 @@ const loadStudents = async () => {
           </tbody>
         </table>
       </div>
+      {/* ERROR */}
+      {error && <p className="error-text">{error}</p>}
+
+      {/* LOADING */}
+      {loading && <p className="loading-text">Loading students...</p>}
+
+      {/* TABLE */}
+      {!loading && !error && (
+        <div className="table-wrapper">
+          <table className="students-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Roll No</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {students.length === 0 ? (
+                <tr>
+                  <td colSpan="7" style={{ textAlign: "center" }}>
+                    No students found
+                  </td>
+                </tr>
+              ) : (
+                students.map((s, index) => (
+                  <tr key={s.id}>
+                    <td>{index + 1}</td>
+                    <td>{s.firstName} {s.lastName}</td>
+                    <td>{s.className}</td>
+                    <td>{s.rollNumber}</td>
+                    <td>{s.phoneNumber}</td>
+                    <td>
+                      <span
+                        className={`status ${
+                          s.isActive ? "active" : "inactive"
+                        }`}
+                      >
+                        {s.isActive ? "Active" : "Inactive"}
+                      </span>
+                    </td>
+                    <td>
+                      <button className="action-btn">Edit</button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+>>>>>>> 402eed8 (Updated school management system)
 
       {/* MODAL */}
       {showModal && (
