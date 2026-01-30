@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import AddTeacherModal from "../components/AddTeacherModal";
 import "../styles/Teachers.css";
+// import { DataGrid } from '@mui/x-data-grid';
+// import Paper from '@mui/material/Paper';
 
 const Teachers = () => {
   const [teachers, setTeachers] = useState([]);

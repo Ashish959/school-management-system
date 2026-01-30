@@ -10,7 +10,11 @@
   align-items: center;
   margin-bottom: 20px;
 }
-
+.table-wrapper {
+  max-height: 475px;  
+  overflow-y: auto;
+  overflow-x: auto;
+}
 .students-header h2 {
   font-size: 24px;
   font-weight: 600;
@@ -55,8 +59,14 @@
 .students-table th {
   text-align: left;
   font-weight: 600;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  background: #2e2b5f;   /* very important */
+  z-index: 100;
   background-color: #f5f5f5;
   color: #374151;
+
 }
 
 .students-table td {
