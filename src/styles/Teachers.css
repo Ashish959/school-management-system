@@ -36,12 +36,20 @@
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
+  max-height: 475px;  
+  overflow-y: auto;
+  border: 1px solid #ddd;
 }
 
 .teachers-table {
   width: 100%;
   border-collapse: collapse;
+}
+.teachers-table thead th {
+  position: sticky;
+  top: 0;
+  background:#2e2b5f;;  
+  z-index: 10;
 }
 
 .teachers-table th,
@@ -50,14 +58,10 @@
   text-align: left;
 }
 
-.teachers-table thead {
-  background: #f9fafb;
-}
-
 .teachers-table th {
   font-size: 14px;
   font-weight: 600;
-  color: #374151;
+  color: #fff;
 }
 
 .teachers-table tbody tr {
