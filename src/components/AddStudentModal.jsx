@@ -4,62 +4,81 @@ import "../styles/AddStudentModal.css";
 
 const AddStudentModal = ({ onClose, onSuccess }) => {
   const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    gender: "",
-    dateOfBirth: "",
-    className: "",
-    sectionName: "",
-    rollNumber: "",
-    fatherName: "",
-    phoneNumber: "",
-    email: "",
+    FirstName: "",
+    LastName: "",
+    Gender: "",
+    DateOfBirth: "",
+    ClassName: "",
+    SectionName: "",
+    RollNumber: "",
+    FatherName: "",
+    PhoneNumber: "",
+    Email: "",
   });
+
 
   const [photo, setPhoto] = useState(null);
   const [preview, setPreview] = useState(null);
+
   const [errors, setErrors] = useState({});
   const [rollExists, setRollExists] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  /* ---------------- HANDLERS ---------------- */
-
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors((prev) => ({ ...prev, [e.target.name]: "" }));
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+
+    setErrors((prev) => ({
+      ...prev,
+      [e.target.name]: "",
+    }));
   };
+
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
+
     if (!file) return;
 
     if (!["image/jpeg", "image/png"].includes(file.type)) {
-      setErrors((e) => ({ ...e, photo: "Only JPG or PNG allowed" }));
+      setErrors((e) => ({
+        ...e,
+        Photo: "Only JPG or PNG allowed",
+      }));
       return;
     }
 
     if (file.size > 2 * 1024 * 1024) {
-      setErrors((e) => ({ ...e, photo: "Max file size is 2MB" }));
+      setErrors((e) => ({
+        ...e,
+        Photo: "Max file size is 2MB",
+      }));
       return;
     }
 
     setPhoto(file);
     setPreview(URL.createObjectURL(file));
-    setErrors((e) => ({ ...e, photo: "" }));
+    setErrors((e) => ({ ...e, Photo: "" }));
   };
 
+
+  /* ---------- CHECK ROLL ---------- */
+
   const checkRollNumber = async () => {
-    if (!form.rollNumber) return;
-
+    if (!form.RollNumber) return;
     try {
-      const res = await api.get("/students/check", {
-        params: { rollNumber: form.rollNumber },
-      });
-
+      const res = await api.get("/students/CheckRoll", {params: { rollNumber: form.RollNumber }, });
       if (res.data?.exists) {
         setRollExists(true);
-        setErrors((e) => ({ ...e, rollNumber: "Roll number already exists" }));
+        setErrors((e) => ({
+          ...e,
+          RollNumber: "Roll number already exists",
+        }));
+
       } else {
         setRollExists(false);
       }
@@ -68,25 +87,29 @@ const AddStudentModal = ({ onClose, onSuccess }) => {
     }
   };
 
-  /* ---------------- SUBMIT ---------------- */
 
-  const handleSubmit = async () => {
+  /* ---------- SUBMIT ---------- */
+
+  const handleSubmit = async (e) => {
+    e?.preventDefault();
+
     if (rollExists) return;
 
     const required = [
-      "firstName",
-      "lastName",
-      "gender",
-      "dateOfBirth",
-      "className",
-      "sectionName",
-      "rollNumber",
-      "fatherName",
-      "phoneNumber",
-      "email",
+      "FirstName",
+      "LastName",
+      "Gender",
+      "DateOfBirth",
+      "ClassName",
+      "SectionName",
+      "RollNumber",
+      "FatherName",
+      "PhoneNumber",
+      "Email",
     ];
 
     let temp = {};
+
     required.forEach((f) => {
       if (!form[f]) temp[f] = "Required";
     });
@@ -96,133 +119,139 @@ const AddStudentModal = ({ onClose, onSuccess }) => {
       return;
     }
 
+
     try {
       setLoading(true);
       setProgress(0);
-
       const data = new FormData();
-      Object.keys(form).forEach((k) => data.append(k, form[k]));
-      if (photo) data.append("photo", photo);
+      Object.keys(form).forEach((k) => {
+        data.append(k, form[k]);
+      });
+
+
+      if (photo) {
+        data.append("Photo", photo); // MUST MATCH DTO
+      }
+
 
       await api.post("/students", data, {
-        headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (e) => {
-          const percent = Math.round((e.loaded * 100) / e.total);
+          const percent = Math.round(
+            (e.loaded * 100) / e.total
+          );
           setProgress(percent);
         },
       });
-
       onSuccess();
       onClose();
-    } catch {
-      setErrors({ submit: "Failed to add student" });
+
+
+    } catch (err) {
+      console.error(err);
+      setErrors({
+        submit: "Failed to add student",
+      });
+
     } finally {
       setLoading(false);
     }
   };
 
-  /* ---------------- UI ---------------- */
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
+
       <div
         className="modal-container"
-        role="dialog"
-        aria-modal="true"
         onClick={(e) => e.stopPropagation()}
       >
+
         <div className="modal-top">
           <h2>Add Student</h2>
-          <button className="icon-close" onClick={onClose} aria-label="Close">
-            ×
-          </button>
+          <button className="icon-close" onClick={onClose}> ×</button>
         </div>
 
-        <div className="modal-content">
-          {/* PHOTO */}
-          <div className="photo-upload">
-            <label className="photo-box">
-              {preview ? <img src={preview} alt="Student" /> : "Upload Photo"}
-              <input type="file" hidden onChange={handlePhotoChange} />
-            </label>
-            {errors.photo && <p className="error">{errors.photo}</p>}
-          </div>
+        <form onSubmit={handleSubmit}>
+          <div className="modal-content">
+            {/* Photo */}
 
-          <div className="row">
-            <Input id="firstName" name="firstName" label="First Name" error={errors.firstName} onChange={handleChange} />
-            <Input id="lastName" name="lastName" label="Last Name" error={errors.lastName} onChange={handleChange} />
-          </div>
+            <div className="photo-upload">
+              <label className="photo-box">
+                {preview ? (<img src={preview} alt="Student" />) : ("Upload Photo")}
 
-          <div className="row">
-            <Select id="gender" name="gender" label="Gender" error={errors.gender} onChange={handleChange}>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </Select>
+                <input type="file" hidden onChange={handlePhotoChange} />
+              </label>
 
-            <Input id="dob" type="date" name="dateOfBirth" label="DOB" error={errors.dateOfBirth} onChange={handleChange} />
-          </div>
-
-          <div className="row">
-            <Input id="class" name="className" label="Class" error={errors.className} onChange={handleChange} />
-            <Input id="section" name="sectionName" label="Section" error={errors.sectionName} onChange={handleChange} />
-          </div>
-
-          <Input
-            id="roll"
-            name="rollNumber"
-            label="Roll Number"
-            error={errors.rollNumber}
-            onChange={handleChange}
-            onBlur={checkRollNumber}
-          />
-
-          <Input id="father" name="fatherName" label="Father Name" error={errors.fatherName} onChange={handleChange} />
-          <Input id="phone" type="tel" name="phoneNumber" label="Phone" error={errors.phoneNumber} onChange={handleChange} />
-          <Input id="email" type="email" name="email" label="Email" error={errors.email} onChange={handleChange} />
-
-          {/* PROGRESS BAR */}
-          {loading && (
-            <div className="progress-wrap">
-              <div className="progress-bar" style={{ width: `${progress}%` }} />
-              <span>{progress}%</span>
+              {errors.Photo && (<p className="error">{errors.Photo}</p>)}
             </div>
-          )}
 
-          {errors.submit && <p className="error">{errors.submit}</p>}
-        </div>
+            <div className="row">
+              <Input name="FirstName" label="First Name" error={errors.FirstName} onChange={handleChange} />
+              <Input name="LastName" label="Last Name" error={errors.LastName} onChange={handleChange} />
+            </div>
+            <div className="row">
+              <Select name="Gender" label="Gender" error={errors.Gender} onChange={handleChange}>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </Select>
+              <Input type="date" name="DateOfBirth" label="DOB" error={errors.DateOfBirth} onChange={handleChange} />
+            </div>
+            <div className="row">
+              <Input name="ClassName" label="Class" error={errors.ClassName} onChange={handleChange} />
+              <Input name="SectionName" label="Section" error={errors.SectionName} onChange={handleChange} />
+            </div>
 
-        <div className="modal-footer">
-          <button className="btn-outline" onClick={onClose}>
-            Cancel
-          </button>
-          <button className="btn-primary" disabled={loading || rollExists} onClick={handleSubmit}>
-            {loading ? "Saving..." : "Save Student"}
-          </button>
-        </div>
+            <Input name="RollNumber" label="Roll Number" error={errors.RollNumber} onChange={handleChange} onBlur={checkRollNumber} />
+            <Input name="FatherName" label="Father Name" error={errors.FatherName} onChange={handleChange} />
+            <Input type="tel" name="PhoneNumber" label="Phone" error={errors.PhoneNumber} onChange={handleChange} />
+            <Input type="email" name="Email" label="Email" error={errors.Email} onChange={handleChange} />
+
+            {loading && (
+              <div className="progress-wrap">
+                <div
+                  className="progress-bar"
+                  style={{ width: `${progress}%` }}
+                />
+                <span>{progress}%</span>
+              </div>
+            )}
+            {errors.submit && (<p className="error">{errors.submit}</p>)}
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn-outline" onClick={onClose}>Cancel</button>
+            <button type="submit" className="btn-primary" disabled={loading || rollExists}>
+              {loading ? "Saving..." : "Save Student"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
 };
 
-/* ---------- REUSABLE INPUTS ---------- */
 
-const Input = ({ label, error, id, ...props }) => (
+/* ---------- INPUT ---------- */
+
+const Input = ({ label, error, ...props }) => (
   <div className={`field ${error ? "invalid" : ""}`}>
-    <input id={id} placeholder=" " aria-invalid={!!error} {...props} />
-    <label htmlFor={id}>{label}</label>
-    {error && <span className="error">{error}</span>}
+
+    <input placeholder=" " aria-invalid={!!error} {...props} />
+    <label>{label}</label>
+    {error && (<span className="error">{error}</span>)}
   </div>
 );
 
-const Select = ({ label, error, id, children, ...props }) => (
+const Select = ({ label, error, children, ...props }) => (
   <div className={`field ${error ? "invalid" : ""}`}>
-    <select id={id} aria-invalid={!!error} {...props}>
+
+    <select aria-invalid={!!error} {...props} >
       <option value="" disabled hidden />
       {children}
     </select>
-    <label htmlFor={id}>{label}</label>
-    {error && <span className="error">{error}</span>}
+    <label>{label}</label>
+
+    {error && (<span className="error">{error}</span>)}
   </div>
 );
 
