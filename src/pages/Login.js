@@ -62,10 +62,7 @@ function Login() {
     }
 
     const result = await dispatch(loginUser({ username, password }));
-<<<<<<< HEAD
-=======
 
->>>>>>> 402eed8 (Updated school management system)
     if (loginUser.fulfilled.match(result)) {
       localStorage.removeItem("loginAttempts");
       localStorage.removeItem("lockUntil");
