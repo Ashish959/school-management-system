@@ -1,66 +1,3 @@
-// import { useState } from "react";
-// import api from "../services/api";
-// import "../styles/Students.css";
-
-// const AddStudentModal = ({ onClose, onSuccess }) => {
-//     const [formData, setFormData] = useState({
-//         AdmissionNo: "",
-//         FirstName: "",
-//         LastName: "",
-//         Gender: "",
-//         DateOfBirth: "",
-//         ClassName: "",
-//         SectionName: "",
-//         FatherName: "",
-//         PhoneNumber: "",
-//         EmailAddress: "",
-//         CreatedBy: ""
-//     });
-
-//     const handleChange = (e) => {
-//         setFormData({ ...formData, [e.target.name]: e.target.value });
-//     };
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-
-//         await api.post("/students", formData);
-//         onSuccess();
-//         onClose();
-//     };
-
-//     return (
-//         <div className="modal-overlay">
-//             <div className="modal">
-//                 <h3>Add Student</h3>
-
-//                 <form onSubmit={handleSubmit} className="modal-form">
-//                     <input name="AdmissionNo" placeholder="Admission No" onChange={handleChange} required />
-//                     <input name="FirstName" placeholder="First Name" onChange={handleChange} required />
-//                     <input name="LastName" placeholder="Last Name" onChange={handleChange} required />
-//                     <input name="Gender" placeholder="Gender" onChange={handleChange} required />
-//                     <input type="date" name="DateOfBirth" placeholder="DateOf Birth" onChange={handleChange} required />
-//                     <input name="ClassName" placeholder="Class Name" onChange={handleChange} required />
-//                     <input name="SectionName" placeholder="Section Name" onChange={handleChange} required />
-//                     <input name="FatherName" placeholder="Father Name" onChange={handleChange} required />
-//                     <input name="PhoneNumber" placeholder="Phone Number" onChange={handleChange} required />
-//                     <input name="EmailAddress" placeholder="Email Address" onChange={handleChange} required />
-//                     <input name="CreatedBy" placeholder="Created By" onChange={handleChange} required />
-//                     <div className="modal-actions">
-//                         <button type="button" onClick={onClose} className="btn-cancel">
-//                             Cancel
-//                         </button>
-//                         <button type="submit" className="btn-save">
-//                             Save
-//                         </button>
-//                     </div>
-//                 </form>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default AddStudentModal;
 import { useState } from "react";
 import api from "../services/api";
 import "../styles/AddStudentModal.css";
@@ -242,18 +179,19 @@ const AddStudentModal = ({ onClose, onSuccess }) => {
               <label className="photo-box">
                 {preview ? (<img src={preview} alt="Student" />) : ("Upload Photo")}
 
-                <input type="file" hidden onChange={handlePhotoChange} />
+                <input type="file"  hidden onChange={handlePhotoChange}   accept="image/png, image/jpeg, image/jpg" />
               </label>
 
               {errors.Photo && (<p className="error">{errors.Photo}</p>)}
             </div>
 
             <div className="row">
-              <Input name="FirstName" label="First Name" error={errors.FirstName} onChange={handleChange} />
-              <Input name="LastName" label="Last Name" error={errors.LastName} onChange={handleChange} />
+              <Input name="FirstName" label="First Name" error={errors.FirstName} onChange={handleChange} maxlength="20"/>
+              <Input name="LastName" label="Last Name" error={errors.LastName} onChange={handleChange}maxlength="20" />
             </div>
             <div className="row">
               <Select name="Gender" label="Gender" error={errors.Gender} onChange={handleChange}>
+                 <option value="Gender">Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
@@ -261,15 +199,17 @@ const AddStudentModal = ({ onClose, onSuccess }) => {
               <Input type="date" name="DateOfBirth" label="DOB" error={errors.DateOfBirth} onChange={handleChange} />
             </div>
             <div className="row">
-              <Input name="ClassName" label="Class" error={errors.ClassName} onChange={handleChange} />
-              <Input name="SectionName" label="Section" error={errors.SectionName} onChange={handleChange} />
+              <Input name="ClassName" label="Class" error={errors.ClassName} onChange={handleChange} maxlength="10" />
+              <Input name="SectionName" label="Section" error={errors.SectionName} onChange={handleChange} maxlength="10" />
             </div>
-
-            <Input name="RollNumber" label="Roll Number" error={errors.RollNumber} onChange={handleChange} onBlur={checkRollNumber} />
-            <Input name="FatherName" label="Father Name" error={errors.FatherName} onChange={handleChange} />
-            <Input type="tel" name="PhoneNumber" label="Phone" error={errors.PhoneNumber} onChange={handleChange} />
+            <div className="row">
+            <Input name="RollNumber" label="Roll Number" error={errors.RollNumber} onChange={handleChange} onBlur={checkRollNumber} maxlength="10" />
+            <Input name="FatherName" label="Father Name" error={errors.FatherName} onChange={handleChange} maxlength="30"/>
+            </div>
+            <div className="row">
+            <Input type="tel" name="PhoneNumber" label="Phone" error={errors.PhoneNumber} onChange={handleChange} maxlength="10" />
             <Input type="email" name="Email" label="Email" error={errors.Email} onChange={handleChange} />
-
+               </div>
             {loading && (
               <div className="progress-wrap">
                 <div
